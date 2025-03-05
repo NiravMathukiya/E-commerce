@@ -33,13 +33,15 @@ export const getFeaturedProduct = async (req, res) => {
     }
 }
 
+
 export const createProduct = async (req, res) => {
     try {
         const { name, description, price, image, category } = req.body;
-        let cloudinaryResponse = await cloudinary.uploader.upload(image);
+
+        let cloudinaryResponse = null;
 
         if (image) {
-            await cloudinary.uploader.upload(image, { folder: "products" });
+            cloudinaryResponse = await cloudinary.uploader.upload(image, { folder: "products" });
         }
 
         const product = await Product.create({
@@ -47,14 +49,15 @@ export const createProduct = async (req, res) => {
             description,
             price,
             image: cloudinaryResponse?.secure_url ? cloudinaryResponse.secure_url : "",
-            category
-        })
-        res.status(201).json({ product });
+            category,
+        });
+
+        res.status(201).json(product);
     } catch (error) {
-        console.log("erro in create product controller", error);
-        res.status(500).json({ message: "Internal Server Error" });
+        console.log("Error in createProduct controller", error.message);
+        res.status(500).json({ message: "Server error", error: error.message });
     }
-}
+};
 
 export const deleteProduct = async (req, res) => {
     try {
@@ -129,11 +132,11 @@ export const toggtFeatureProduct = async (req, res) => {
     }
 }
 async function updateFecturedProductsCache() {
-    try{
+    try {
         const featuredProducts = await Product.find({ isFeatured: true }).lean();
-        await redis.set("featured_Products", JSON.stringify(featuredProducts) );
+        await redis.set("featured_Products", JSON.stringify(featuredProducts));
 
-    }catch(error){
+    } catch (error) {
         console.log("erro in updateFecturedProductsCache", error);
     }
 }

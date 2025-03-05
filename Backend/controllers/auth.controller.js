@@ -23,16 +23,17 @@ const setCookies = (res, accessToken, refreshToken) => {
     res.cookie("accessToken", accessToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
-        maxAge: 15 * 60 * 1000,
+        sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", // ✅ Use "None" if different domains
+        maxAge: 15 * 60 * 1000, // 15 minutes
     });
     res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
+        sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
-}
+};
+    
 // reacraete access token
 export const refreshToken = async (req, res) => {
     try {
@@ -56,8 +57,8 @@ export const refreshToken = async (req, res) => {
             secure: process.env.NODE_ENV === "production",
             sameSite: "strict",
             maxAge: 15 * 60 * 1000,
-        }) ; 
-        res.json({ message:"token refresh successfully" });
+        });
+        res.json({ message: "token refresh successfully" });
     } catch (error) {
         console.error("Error refreshing token", error);
         res.status(500).json({ message: "Error refreshing token" });
@@ -149,10 +150,10 @@ export const logoutController = async (req, res) => {
 
 
 
-export const getprofile =async (req, res)=>{
+export const getprofile = async (req, res) => {
     try {
         res.json(req.user)
     } catch (error) {
-        res.status(500).json({message:"sercer error"})
+        res.status(500).json({ message: "sercer error" })
     }
 }

@@ -1,2 +1,9 @@
 @import "tailwindcss";
 
+*{
+    user-select: none;
+}
+
+.spin::-webkit-inner-spin-button{
+    display: none;
+}
