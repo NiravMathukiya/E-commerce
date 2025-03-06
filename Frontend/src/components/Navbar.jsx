@@ -6,9 +6,10 @@ import useAuthStore from '../store/useAuthStore';
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const { user, logout} = useAuthStore();
+  const { user, logout ,cart } = useAuthStore();
+  {console.log(cart)}
 
-  const isAdmin = user && user.data?.role === 'admin';
+  const isAdmin = user && user.role === 'admin';
 
   return (
     <div className='fixed top-0 left-0 w-full bg-gray-900/90 backdrop-blur-md shadow-lg z-40 transition-all duration-300 border-b border-emerald-800'>
@@ -36,7 +37,7 @@ const Navbar = () => {
               <Link to="/cart" className='relative group flex items-center'>
                 <ShoppingCart className='text-gray-300 group-hover:text-emerald-400' size={20} />
                 <span className='hidden sm:inline text-gray-300 group-hover:text-emerald-400 ml-1'>Cart</span>
-                <span className='absolute -top-2.5 -left-2.5 bg-emerald-500 text-white rounded-full px-2 py-0.5 text-xs group-hover:bg-emerald-400 transition-all duration-300 ease-in-out'>0</span>
+                <span className='absolute -top-2.5 -left-2.5 bg-emerald-500 text-white rounded-full px-2 py-0.5 text-xs group-hover:bg-emerald-400 transition-all duration-300 ease-in-out'>{cart.length}</span>
               </Link>
             )}
 
@@ -82,7 +83,7 @@ const Navbar = () => {
               <Link to="/cart" className='relative flex items-center text-gray-300 hover:text-emerald-400' onClick={() => setIsMenuOpen(false)}>
                 <ShoppingCart size={20} />
                 <span className='ml-1'>Cart</span>
-                <span className='absolute -top-1.5 -right-3 bg-emerald-500 text-white rounded-full px-2 py-0.5 text-xs'>0</span>
+                <span className='absolute -top-1.5 -right-3 bg-emerald-500 text-white rounded-full px-2 py-0.5 text-xs'>{cart.length}</span>
               </Link>
             )}
 

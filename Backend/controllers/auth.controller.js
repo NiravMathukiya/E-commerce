@@ -125,11 +125,11 @@ export const logoutController = async (req, res) => {
             try {
                 // Verify the refresh token
                 const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-                console.log(decoded)
+                // console.log(decoded)
 
                 // Delete the refresh token from Redis using the userId
                 await redis.del(`refreshToken:${decoded.UserId}`);
-                console.log(`Deleted refresh token for user ${decoded.UserId} from Redis`);
+                // console.log(`Deleted refresh token for user ${decoded.UserId} from Redis`);
 
             } catch (jwtError) {
                 // If JWT verification fails, we can log the user out anyway (invalid token)

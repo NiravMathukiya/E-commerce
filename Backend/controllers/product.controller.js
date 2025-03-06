@@ -20,7 +20,7 @@ export const getFeaturedProduct = async (req, res) => {
             return res.json({ products: JSON.parse(featuredProducts) });
         }
         // lean return error in javascript fromat instand of mongodb {}
-        featuredProducts = await Product.find({ isFeatured: true }).lean();
+        featuredProducts = await Product.find({ isFectured: true }).lean();
 
         // store in radis for fast access
 
@@ -70,7 +70,7 @@ export const deleteProduct = async (req, res) => {
             const publicId = prodcut.image.split("/").pop().split(".")[0];
             try {
                 await cloudinary.uploader.destroy(`products/${publicId}`);
-                console.log("Image deleted from Cloudinary");
+                // console.log("Image deleted from Cloudinary");
             } catch (error) {
                 console.error("Error deleting image from Cloudinary:", error);
             }
@@ -115,25 +115,24 @@ export const getProductByCategory = async (req, res) => {
     }
 }
 
-export const toggtFeatureProduct = async (req, res) => {
+export const toggleFeaturedProduct = async (req, res) => {
     try {
         const product = await Product.findById(req.params.id);
         if (product) {
-            product.isFeatured = !product.isFeatured;
+            product.isFectured = !product.isFectured; // Corrected key name
             const updatedProduct = await product.save();
             await updateFecturedProductsCache();
             res.json({ updatedProduct });
         }
-    }
-    catch (error) {
-        console.log("erro in gat all prodcut controller", error);
+    } catch (error) {
+        console.log("Error in toggleFeaturedProduct controller:", error);
         res.status(500).json({ message: "Internal Server Error" });
-
     }
-}
+};
+
 async function updateFecturedProductsCache() {
     try {
-        const featuredProducts = await Product.find({ isFeatured: true }).lean();
+        const featuredProducts = await Product.find({ isFectured: true }).lean();
         await redis.set("featured_Products", JSON.stringify(featuredProducts));
 
     } catch (error) {

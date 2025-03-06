@@ -1,48 +1,55 @@
-import React, { useEffect } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
+
 import HomePage from "./pages/HomePage";
+import CategoryPage from "./pages/CategoryPage";
+import SignUpPage from "./pages/SignUpPage";
 import LoginPage from "./pages/LoginPage";
-import SignupPage from "./pages/SignupPage";
 import Navbar from "./components/Navbar";
-// import NumberButtons from "./components/NumberButtons";
 import { Toaster } from "react-hot-toast";
-
-// import AdminDashboard from "./pages/AdminDashboard";
+import { useEffect } from "react";
+import LoadingSpinner from "./components/LoadingSpinner";
+import AdminDashboard from "./pages/AdminDashboard";
 import useAuthStore from "./store/useAuthStore";
+import CartPage from "./pages/CartPage";
 
 
-const App = () => {
-  const { user, checkAuth } = useAuthStore();
+function App() {
+  const { user, checkAuth, checkingAuth } = useAuthStore();
 
   useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
 
-  }, [])
+
+
+  if (checkingAuth) return <LoadingSpinner />;
 
   return (
     <div className='min-h-screen bg-gray-900 text-white relative overflow-hidden'>
-      {/* Background gradient  */}
-      <div className='absolute z-30 inset-0 overflow-hidden'>
+      {/* Background gradient */}
+      <div className='absolute inset-0 overflow-hidden'>
         <div className='absolute inset-0'>
           <div className='absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(ellipse_at_top,rgba(16,185,129,0.3)_0%,rgba(10,80,60,0.2)_45%,rgba(0,0,0,0.1)_100%)]' />
         </div>
       </div>
-      {/* Navbar and Routes */}
 
-      <div className="relative z-50 py-20  " >
-        <Toaster />
+      <div className='relative z-50 pt-20'>
         <Navbar />
-
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/signup" element={user ? <HomePage /> : <SignupPage />} />
-          <Route path="/login" element={user ? <HomePage /> : <LoginPage />} />
-          <Route path="/Admindashboard" element={user?.data?.role === "admin" ? <AdminDashboard />  : <Navigate to="/login" />} />
-          {/* <Route path="/num" element={<NumberButtons />} /> */}
-          <Route path="*" element={<h1>Not Found</h1>} />
+          <Route path='/' element={<HomePage />} />
+          <Route path='/signup' element={!user ? <SignUpPage /> : <Navigate to='/' />} />
+          <Route path='/login' element={!user ? <LoginPage /> : <Navigate to='/' />} />
+          <Route
+            path='/Admindashboard'
+            element={user?.role === "admin" ? <AdminDashboard /> : <Navigate to='/login' />}
+          />
+          <Route path='/category/:category' element={<CategoryPage />} />
+          <Route path='/cart' element={user ? <CartPage /> : <Navigate to='/login' />} />
         </Routes>
       </div>
-    </div >
+      <Toaster />
+    </div>
   );
-};
+}
 
 export default App;

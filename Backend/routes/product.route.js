@@ -6,7 +6,7 @@ import { createProduct } from "../controllers/product.controller.js";
 import { deleteProduct } from "../controllers/product.controller.js";
 import { getRecommendatProduct } from "../controllers/product.controller.js";
 import { getProductByCategory } from "../controllers/product.controller.js";
-import { toggtFeatureProduct } from "../controllers/product.controller.js";
+import { toggleFeaturedProduct } from "../controllers/product.controller.js";
 
 const router = express.Router();
 
@@ -15,7 +15,7 @@ router.get("/featured", getFeaturedProduct);
 router.get("/category/:category", getProductByCategory);
 router.get("/recommendations", getRecommendatProduct);
 router.post("/create", protectRoute, adminRoute, createProduct);
-router.patch("/:id", protectRoute, adminRoute, toggtFeatureProduct);
-router.post("/:id", protectRoute, adminRoute, deleteProduct);
+router.patch("/:id", protectRoute, adminRoute, toggleFeaturedProduct);
+router.delete("/:id", protectRoute, adminRoute, deleteProduct);
 
 export default router;

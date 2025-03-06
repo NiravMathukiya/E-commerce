@@ -3,10 +3,13 @@ import Product from "../models/product.model.js";
 
 export const addToCart = async (req, res) => {
     try {
+        console.log(req.body)
         const { productId } = req.body;
         const user = req.user;
 
-        const existingItem = user.cartItems.find(item => item.id === productId);
+
+        const existingItem = user.cartItems.find(item => item?.id === productId);
+        console.log("hello");
         if (existingItem) {
             existingItem.quantity += 1;
         } else {
@@ -72,7 +75,7 @@ export const getCartProducts = async (req, res) => {
         const products = await Product.find({ _id: { $in: req.user.cartItems } });
         const cartItems = products.map(product => {
             const item = req.user.cartItems.find(cartItem => cartItem.id === product.id);
-            return {...product.toJSON(), quantity: item.quantity }; 
+            return { ...product.toJSON(), quantity: item.quantity };
         })
         res.json(cartItems);
     } catch (error) {
