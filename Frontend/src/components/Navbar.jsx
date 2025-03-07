@@ -6,8 +6,8 @@ import useAuthStore from '../store/useAuthStore';
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const { user, logout ,cart } = useAuthStore();
-  {console.log(cart)}
+  const { user, logout, cart } = useAuthStore();
+  // { console.log(cart) }
 
   const isAdmin = user && user.role === 'admin';
 
@@ -26,6 +26,7 @@ const Navbar = () => {
             className='text-gray-300 lg:hidden'
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
+            {/* {console.log(cart.length)} */}
             {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
 

@@ -9,7 +9,7 @@ export const addToCart = async (req, res) => {
 
 
         const existingItem = user.cartItems.find(item => item?.id === productId);
-        console.log("hello");
+        // console.log("hello");
         if (existingItem) {
             existingItem.quantity += 1;
         } else {

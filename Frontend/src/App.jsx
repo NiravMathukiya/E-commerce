@@ -14,11 +14,17 @@ import CartPage from "./pages/CartPage";
 
 
 function App() {
-  const { user, checkAuth, checkingAuth } = useAuthStore();
+  const { user, checkAuth, checkingAuth, getCartItems } = useAuthStore();
 
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
+
+  useEffect(() => {
+    if (!user) return;
+
+    getCartItems();
+  }, [getCartItems, user]);
 
 
 
